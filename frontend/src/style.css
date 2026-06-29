@@ -1,0 +1,96 @@
+/* ═══ Light Theme (default) ═══ */
+:root,
+[data-theme="light"] {
+  --bg-page: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --text-primary: #0a1628;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --border-color: #ebedf0;
+  --border-light: #f0f0f0;
+  --border-lighter: #f9f9f9;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --accent: #667eea;
+  --accent-gradient: linear-gradient(135deg, #667eea, #764ba2);
+  --warn: #f59e0b;
+  --success: #22c55e;
+  --danger: #ee0a24;
+  --monospace: 'SF Mono', 'Fira Code', monospace;
+
+  /* Vant overrides */
+  --van-background: #f5f7fa;
+  --van-background-2: #f7f8fa;
+  --van-card-background: #fff;
+  --van-cell-background: #fff;
+  --van-text-color: #323233;
+  --van-border-color: #ebedf0;
+  --van-gray-1: #f7f8fa;
+  --van-gray-2: #f2f3f5;
+  --van-gray-7: #969799;
+}
+
+/* ═══ Dark Theme ═══ */
+[data-theme="dark"] {
+  --bg-page: #0d1117;
+  --bg-card: #161b22;
+  --bg-input: #21262d;
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border-color: #30363d;
+  --border-light: #21262d;
+  --border-lighter: #1a1f26;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  --accent: #7c8cf8;
+  --accent-gradient: linear-gradient(135deg, #7c8cf8, #a78bfa);
+  --warn: #fbbf24;
+  --success: #34d399;
+  --danger: #f87171;
+  --monospace: 'SF Mono', 'Fira Code', monospace;
+
+  /* Vant overrides */
+  --van-background: #0d1117;
+  --van-background-2: #161b22;
+  --van-card-background: #161b22;
+  --van-cell-background: #161b22;
+  --van-text-color: #e6edf3;
+  --van-border-color: #30363d;
+  --van-gray-1: #161b22;
+  --van-gray-2: #21262d;
+  --van-gray-7: #8b949e;
+  --van-cell-active-color: #21262d;
+}
+
+/* ═══ Base ═══ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ═══ Theme Toggle ═══ */
+.theme-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+.theme-toggle:active {
+  transform: scale(0.9);
+}

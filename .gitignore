@@ -1,0 +1,10 @@
+# push-manager
+__pycache__/
+*.pyc
+venv/
+node_modules/
+dist/
+data/
+backups/
+uploads/
+*.db
