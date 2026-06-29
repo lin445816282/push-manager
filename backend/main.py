@@ -106,6 +106,7 @@ class ProjectIn(BaseModel):
     path: str
     type: str = "code"
     remote_url: str = ""
+    deploy_url: str = ""
     branch: str = "main"
     docs_storage: str = "manager"
     docs_path: str = "docs"
@@ -117,6 +118,7 @@ class ProjectUpdate(BaseModel):
     path: Optional[str] = None
     type: Optional[str] = None
     remote_url: Optional[str] = None
+    deploy_url: Optional[str] = None
     branch: Optional[str] = None
     docs_storage: Optional[str] = None
     docs_path: Optional[str] = None
@@ -232,9 +234,9 @@ def add_project(p: ProjectIn):
         raise HTTPException(409, "项目已存在")
 
     db.execute(
-        """INSERT INTO projects (name, path, type, remote_url, branch, docs_storage, docs_path, auto_push_docs)
-           VALUES (?,?,?,?,?,?,?,?)""",
-        (p.name, path, ptype, p.remote_url, p.branch, p.docs_storage, p.docs_path, int(p.auto_push_docs))
+        """INSERT INTO projects (name, path, type, remote_url, deploy_url, branch, docs_storage, docs_path, auto_push_docs)
+           VALUES (?,?,?,?,?,?,?,?,?)""",
+        (p.name, path, ptype, p.remote_url, p.deploy_url, p.branch, p.docs_storage, p.docs_path, int(p.auto_push_docs))
     )
     db.commit()
     pid = db.execute("SELECT last_insert_rowid()").fetchone()[0]
@@ -258,7 +260,7 @@ def update_project(pid: int, p: ProjectUpdate):
         raise HTTPException(404, "项目不存在")
 
     updates = {}
-    for k in ["name", "path", "type", "remote_url", "branch", "docs_storage", "docs_path"]:
+    for k in ["name", "path", "type", "remote_url", "deploy_url", "branch", "docs_storage", "docs_path"]:
         v = getattr(p, k, None)
         if v is not None:
             updates[k] = v

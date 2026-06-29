@@ -86,6 +86,18 @@
                   :title="getStatusTitle(p)"
                 >●</span>
               </div>
+              <div class="url-row">
+                <span class="url-label">🌐</span>
+                <a v-if="p.deploy_url" :href="p.deploy_url" target="_blank" class="url-link">{{ p.deploy_url }}</a>
+                <span v-else class="url-link url-empty">未配置</span>
+                <van-button v-if="p.deploy_url" size="mini" icon="share-o" round plain hairline class="copy-btn" @click.stop="copyUrl(p.deploy_url)">复制</van-button>
+              </div>
+              <div class="url-row">
+                <span class="url-label">🐙</span>
+                <a v-if="p.remote_url" :href="githubUrl(p.remote_url)" target="_blank" class="url-link">{{ p.remote_url }}</a>
+                <span v-else class="url-link url-empty">未配置</span>
+                <van-button v-if="p.remote_url" size="mini" icon="share-o" round plain hairline class="copy-btn" @click.stop="copyUrl(p.remote_url)">复制</van-button>
+              </div>
               <div class="cell-actions">
                 <van-button
                   size="mini"
@@ -157,6 +169,14 @@ const fmt = (n) => (n ?? 0).toLocaleString()
 const truncate = (str, len) => {
   if (!str) return ''
   return str.length > len ? str.slice(0, len) + '...' : str
+}
+
+const githubUrl = (remote) => {
+  if (!remote) return ''
+  // git@github.com:user/repo.git → https://github.com/user/repo
+  // https://github.com/user/repo.git → https://github.com/user/repo
+  const m = remote.match(/github\.com[:/](.+?)(?:\.git)?$/)
+  return m ? 'https://github.com/' + m[1] : remote
 }
 
 const typeTagColor = (type) => {
@@ -263,6 +283,25 @@ async function batchPushAll() {
     showFailToast('推送出错')
   } finally {
     batchLoading.value = false
+  }
+}
+
+// ── Copy URL ───────────────────────────────
+async function copyUrl(url) {
+  try {
+    await navigator.clipboard.writeText(url)
+    showSuccessToast('已复制到剪贴板')
+  } catch {
+    // Fallback for non-HTTPS or older browsers
+    const ta = document.createElement('textarea')
+    ta.value = url
+    ta.style.position = 'fixed'
+    ta.style.opacity = '0'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+    showSuccessToast('已复制')
   }
 }
 
@@ -410,6 +449,47 @@ onMounted(loadProjects)
   --van-button-mini-height: 28px;
   --van-button-mini-font-size: 11px;
   --van-button-mini-padding: 0 12px;
+}
+
+/* ── URL Row (deploy & github) ──────────── */
+.url-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--bg-page);
+  border-radius: 6px;
+}
+.url-label {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.url-link {
+  flex: 1;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--monospace);
+}
+.url-link[href] {
+  color: var(--accent);
+}
+.url-link[href]:active {
+  opacity: 0.7;
+}
+.url-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  opacity: 0.5;
+}
+.copy-btn {
+  flex-shrink: 0;
+  --van-button-mini-height: 24px;
+  --van-button-mini-font-size: 10px;
+  --van-button-mini-padding: 0 10px;
 }
 
 /* ── Empty State ─────────────────────────── */
