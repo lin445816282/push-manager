@@ -1000,6 +1000,14 @@ if os.path.isdir(UPLOADS_DIR):
 
 
 # ═══════════════════════════════════════════
+# Health
+# ═══════════════════════════════════════════
+@app.get("/api/health")
+async def health():
+    return {"status": "ok", "service": "push-manager"}
+
+
+# ═══════════════════════════════════════════
 # Static Files & SPA
 # ═══════════════════════════════════════════
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend", "dist")
