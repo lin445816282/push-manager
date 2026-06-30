@@ -31,7 +31,10 @@
           <div class="remote-list" v-if="selfStatus.remotes.length">
             <div v-for="r in selfStatus.remotes" :key="r.name" class="remote-item">
               <span class="remote-name">{{ r.name }}</span>
-              <span class="remote-url">{{ r.url }}</span>
+              <div class="remote-url-row">
+                <span class="remote-url">{{ r.url }}</span>
+                <van-button size="mini" type="primary" class="copy-btn-mini" @click.stop="copyUrl(r.url)">📋</van-button>
+              </div>
             </div>
           </div>
         </div>
@@ -69,6 +72,12 @@
         >
           <template #right-icon>
             <div class="remote-actions">
+              <van-button
+                size="mini"
+                type="primary"
+                class="copy-btn-mini"
+                @click.stop="copyUrl(r.url)"
+              >📋</van-button>
               <van-button
                 size="mini"
                 type="primary"
@@ -354,6 +363,24 @@ async function saveSettings() {
 }
 
 onMounted(loadAll)
+
+// ── Copy URL ───────────────────────────────
+async function copyUrl(url) {
+  try {
+    await navigator.clipboard.writeText(url)
+    showSuccessToast('已复制')
+  } catch {
+    const ta = document.createElement('textarea')
+    ta.value = url
+    ta.style.position = 'fixed'
+    ta.style.opacity = '0'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+    showSuccessToast('已复制')
+  }
+}
 </script>
 
 <style scoped>
@@ -410,7 +437,21 @@ onMounted(loadAll)
   font-size: 12px;
 }
 .remote-name { color: var(--accent); font-weight: 500; flex-shrink: 0; }
-.remote-url { color: var(--text-muted); font-family: var(--monospace); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 8px; }
+.remote-url-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+  margin-left: 8px;
+}
+.remote-url { color: var(--text-muted); font-family: var(--monospace); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.copy-btn-mini {
+  flex-shrink: 0;
+  --van-button-mini-height: 22px;
+  --van-button-mini-font-size: 11px;
+  --van-button-mini-padding: 0 6px;
+}
 
 /* ── Batch Button ──────────────────────── */
 .batch-section { margin-bottom: 16px; }

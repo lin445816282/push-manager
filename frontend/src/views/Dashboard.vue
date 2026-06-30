@@ -90,13 +90,13 @@
                 <span class="url-label">🌐</span>
                 <a v-if="p.deploy_url" :href="p.deploy_url" target="_blank" class="url-link">{{ p.deploy_url }}</a>
                 <span v-else class="url-link url-empty">未配置</span>
-                <van-button v-if="p.deploy_url" size="mini" icon="share-o" round plain hairline class="copy-btn" @click.stop="copyUrl(p.deploy_url)">复制</van-button>
+                <van-button v-if="p.deploy_url" size="small" type="primary" class="copy-btn" @click.stop="copyUrl(p.deploy_url)">📋 复制</van-button>
               </div>
               <div class="url-row">
                 <span class="url-label">🐙</span>
                 <a v-if="p.remote_url" :href="githubUrl(p.remote_url)" target="_blank" class="url-link">{{ p.remote_url }}</a>
                 <span v-else class="url-link url-empty">未配置</span>
-                <van-button v-if="p.remote_url" size="mini" icon="share-o" round plain hairline class="copy-btn" @click.stop="copyUrl(p.remote_url)">复制</van-button>
+                <van-button v-if="p.remote_url" size="small" type="primary" class="copy-btn" @click.stop="copyUrl(p.remote_url)">📋 复制</van-button>
               </div>
               <div class="cell-actions">
                 <van-button
@@ -334,19 +334,20 @@ onMounted(loadProjects)
 /* ── Stats Row ───────────────────────────── */
 .stats-row {
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 .stat-card {
   flex: 1;
+  min-width: 0;
   background: var(--bg-card);
   border-radius: 12px;
-  padding: 16px 12px;
+  padding: 12px 8px;
   text-align: center;
   box-shadow: var(--shadow);
 }
 .stat-value {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;
@@ -455,17 +456,20 @@ onMounted(loadProjects)
 .url-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
+  gap: 4px;
+  padding: 3px 6px;
   background: var(--bg-page);
   border-radius: 6px;
+  min-width: 0;
 }
 .url-label {
-  font-size: 14px;
+  font-size: 13px;
   flex-shrink: 0;
 }
 .url-link {
   flex: 1;
+  min-width: 0;
+  max-width: 75%;
   font-size: 11px;
   color: var(--text-muted);
   text-decoration: none;
@@ -487,9 +491,9 @@ onMounted(loadProjects)
 }
 .copy-btn {
   flex-shrink: 0;
-  --van-button-mini-height: 24px;
-  --van-button-mini-font-size: 10px;
-  --van-button-mini-padding: 0 10px;
+  --van-button-small-height: 28px;
+  --van-button-small-font-size: 12px;
+  --van-button-small-padding: 0 10px;
 }
 
 /* ── Empty State ─────────────────────────── */

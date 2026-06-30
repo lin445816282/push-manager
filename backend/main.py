@@ -1008,6 +1008,23 @@ async def health():
 
 
 # ═══════════════════════════════════════════
+# Local paths quick select
+# ═══════════════════════════════════════════
+@app.get("/api/local-paths")
+async def local_paths():
+    """Return local project directories for path quick-select"""
+    import glob
+    project_dirs = []
+    base = os.path.expanduser("~/projects")
+    if os.path.isdir(base):
+        for d in sorted(os.listdir(base)):
+            full = os.path.join(base, d)
+            if os.path.isdir(full) and not d.startswith("."):
+                project_dirs.append(full)
+    return {"paths": project_dirs}
+
+
+# ═══════════════════════════════════════════
 # Static Files & SPA
 # ═══════════════════════════════════════════
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend", "dist")

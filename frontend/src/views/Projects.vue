@@ -126,6 +126,20 @@
           placeholder="/path/to/project"
           required
         />
+        <div v-if="!isEdit" class="quick-paths">
+          <span class="quick-paths-label">📁 本地路径</span>
+          <div class="quick-paths-grid">
+            <van-button
+              v-for="p in localPaths"
+              :key="p"
+              size="small"
+              plain
+              hairline
+              class="quick-path-btn"
+              @click="form.path = p"
+            >{{ p.split('/').pop() }}</van-button>
+          </div>
+        </div>
         <van-field
           v-model="typeDisplay"
           label="类型"
@@ -232,6 +246,27 @@ const form = reactive({
   docs_path: 'docs/',
   auto_push_docs: false,
 })
+
+// ── Local paths quick select ───────────────────────
+const localPaths = ref([])
+async function fetchLocalPaths() {
+  try {
+    const { data } = await api.get('/local-paths')
+    localPaths.value = data.paths || []
+  } catch (e) {
+    // Fallback: hardcoded common paths
+    localPaths.value = [
+      '/home/xiaolin/projects/stock-aggregator',
+      '/home/xiaolin/projects/purchase-tracker',
+      '/home/xiaolin/projects/push-manager',
+      '/home/xiaolin/projects/aa-books',
+      '/home/xiaolin/projects/remind',
+      '/home/xiaolin/projects/fund-tracker',
+      '/home/xiaolin/projects/nav-page',
+      '/home/xiaolin/projects/moe-island',
+    ]
+  }
+}
 
 // ── Type picker ────────────────────────────────────
 const showTypeSheet = ref(false)
@@ -345,6 +380,7 @@ function fillForm(project) {
 
 function openCreate() {
   resetForm()
+  fetchLocalPaths()
   showForm.value = true
 }
 
@@ -556,6 +592,27 @@ onMounted(() => {
   transform: scale(0.92);
 }
 
+/* ── Quick local paths ────────────────────────── */
+.quick-paths {
+  padding: 4px 16px 8px;
+}
+.quick-paths-label {
+  font-size: 11px;
+  color: var(--van-text-color-weak, #969799);
+  margin-bottom: 6px;
+  display: block;
+}
+.quick-paths-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.quick-path-btn {
+  --van-button-small-height: 24px;
+  --van-button-small-font-size: 10px;
+  --van-button-small-padding: 0 8px;
+}
+
 /* Form popup */
 .form-container {
   padding: 20px 12px 32px;
@@ -578,6 +635,6 @@ onMounted(() => {
 }
 
 .form-actions {
-  padding: 16px 12px 0;
+  padding: 16px 16px 0;
 }
 </style>
